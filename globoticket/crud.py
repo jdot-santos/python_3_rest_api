@@ -4,6 +4,8 @@ from sqlalchemy.orm import Session
 from globoticket.models import DBEvent
 
 
+# we're isolating these db calls to its own file so that unit testing will be easier
+# via mocking
 def get_dbevent(id: int, db: Session) -> DBEvent | None:
     return db.get(DBEvent, id)
 

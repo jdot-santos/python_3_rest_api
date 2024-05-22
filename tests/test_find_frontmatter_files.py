@@ -15,11 +15,19 @@ def test_find_file_toplevel():
 
 def test_find_file_subdirs():
     """Locate a yaml file in subdirectory"""
-    assert find_frontmatter_file("123456", FM_PATH) == FM_PATH / "hiphop" / "123456.yml"
-    assert find_frontmatter_file("654321", FM_PATH) == FM_PATH / "reggae" / "654321.yml"
+    assert find_frontmatter_file("123456", FM_PATH) == FM_PATH / "reggae" / "123456.yml"
+    assert (
+        find_frontmatter_file("654321", FM_PATH) == FM_PATH / "hip-hop" / "654321.yml"
+    )
 
 
 def test_find_nosuchfile():
     """Raise correct exception when file does not exist"""
     with pytest.raises(FileNotFoundError):
         find_frontmatter_file("000000", FM_PATH)
+
+
+def test_find_empty_string():
+    """Raise correct exception when an empty string is passed in"""
+    with pytest.raises(ValueError):
+        find_frontmatter_file("", FM_PATH)

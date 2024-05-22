@@ -30,7 +30,7 @@
         $(document).ready(function () {
             const id = new URL(document.location).searchParams.get("id")
             $.ajax({
-                url: `/event/${id}`,
+                url: `/events/${id}`,
                 success: data => {
                     show_event(data);
                 },

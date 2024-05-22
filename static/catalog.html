@@ -26,7 +26,7 @@
         $(document).ready(function () {
 
             $.ajax({
-                url: "/event/",
+                url: "/events",
                 success: data => {
                     $("#loading").hide();
                     data.map(event => addevent(event));

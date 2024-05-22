@@ -1,3 +1,8 @@
+"""
+frontmatter.py
+Responsible for getting the YAML files that builds the product info
+for events and categories
+"""
 import re
 from pathlib import Path
 from typing import Any
@@ -15,16 +20,15 @@ def get_frontmatter(product_code: str) -> dict[str, Any]:
 
 
 def find_frontmatter_file(product_code: str, frontmatter_dir: Path) -> Path:
-    """Find a file named `product_code`.yml in frontmatter_dir
-    and its subdirectories.
-
-    Raises FileNotFoundError if no file is found for this product_code."""
-    matches = list(frontmatter_dir.glob(f"**/{product_code}.yml"))
-    if not matches:
-        raise FileNotFoundError(
-            f"Cannot find yaml file for product {product_code} in {frontmatter_dir}"
+    if not product_code.strip():
+        raise ValueError(
+            "An empty string was passed in. Please provide a valid product_code value."
         )
-    return matches[0]
+
+    for file_path in frontmatter_dir.rglob(f"{product_code}.yml"):
+        return file_path  # return the first
+
+    raise FileNotFoundError(f"File {product_code}.yml was not found")
 
 
 class InvalidFrontmatterError(Exception):
@@ -32,11 +36,11 @@ class InvalidFrontmatterError(Exception):
 
 
 FRONTMATTER_REGEX = re.compile(
-    # Please add a regular expression
-    # containing two named groups:
-    # one named "yaml" containing the YAML data (first part of the file)
-    # one named "content" containing the text content (second part of the file)
-    r"---\n(?P<yaml>.*?)---\n(?P<content>.*)",
+    # The ? in the regex makes it non-greedy, which matches everything
+    #   up to the three dashes
+    # the re.DOTALL option makes the star wildcard also match a new
+    #   line character
+    r"(---\n(?P<yaml>.*?)---\n)(?P<content>.*)",
     re.DOTALL,
 )
 

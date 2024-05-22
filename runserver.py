@@ -3,6 +3,7 @@ runserver.py
 ---
 
 Run this script to start the globoticket app.
+uvicorn is an HTTP server, a server that can serve websites
 """
 import uvicorn
 
